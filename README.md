@@ -1,12 +1,21 @@
-# React + Vite
+# MusicSeek 🎧
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+MusicSeek is a music search tool for DJs, collectors, and curious listeners.  
+It lets you search tracks and shows where to buy or stream them (Bandcamp, Discogs, Spotify, etc).
 
-Currently, two official plugins are available:
+This project is a work-in-progress, aimed to demonstrate frontend development and QA automation skills.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🛠️ Stack
 
-## Expanding the ESLint configuration
+- React + Vite
+- JavaScript (or TypeScript coming soon)
+- CSS Modules (Tailwind optional)
+- Planned APIs: Spotify, Bandcamp, Discogs, Beatport
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🚀 Getting Started
+
+```bash
+git clone https://github.com/andshe/musicseek.git
+cd musicseek
+npm install
+npm run dev
