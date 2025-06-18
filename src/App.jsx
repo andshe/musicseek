@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import './App.css'
 import SearchBar from './components/SearchBar'
 
 function App() {
   const [query, setQuery] = useState('')
   const [results, setResults] = useState([])
+
+  const audioRef = useRef(null)
 
   const handleSearch = async () => {
     console.log('Searching:', query)
@@ -31,7 +33,16 @@ function App() {
             <img src={track.artworkUrl100} alt={track.trackName} />
             <div>
               <p><strong>{track.trackName}</strong> - {track.artistName}</p>
-              <audio controls src={track.previewUrl}></audio>
+              <audio
+                controls
+                src={track.previewUrl}
+                onPlay={(e) => {
+                  if (audioRef.current && audioRef.current !== e.target) {
+                    audioRef.current.pause()
+                  }
+                  audioRef.current = e.target
+                }}
+              ></audio>
             </div>
           </div>
         ))}
