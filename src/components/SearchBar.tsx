@@ -9,7 +9,7 @@ function SearchBar({ query, setQuery, onSearch }: SearchBarProps) {
     <div className="w-full flex gap-2">
       <input
         type="text"
-        placeholder="Buscar música..."
+        placeholder="Type here..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         onKeyDown={(e) => {
@@ -23,7 +23,7 @@ function SearchBar({ query, setQuery, onSearch }: SearchBarProps) {
         onClick={onSearch}
         className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
       >
-        Buscar
+        Seek
       </button>
     </div>
   );
