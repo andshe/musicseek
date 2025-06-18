@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './App.css'
+import SearchBar from './components/SearchBar'
 
 function App() {
   const [query, setQuery] = useState('')
@@ -11,15 +12,7 @@ function App() {
   return (
     <div className="container">
       <h1>MusicSeek 🎧</h1>
-      <div className="search-bar">
-        <input
-          type="text"
-          placeholder="Search for music..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <button onClick={handleSearch}>Search</button>
-      </div>
+      <SearchBar query={query} setQuery={setQuery} onSearch={handleSearch} />
     </div>
   )
 }
