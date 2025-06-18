@@ -6,6 +6,11 @@ function SearchBar({ query, setQuery, onSearch }) {
           placeholder="Search for music..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              onSearch()
+            }
+          }}
         />
         <button onClick={onSearch}>Search</button>
       </div>
