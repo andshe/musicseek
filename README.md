@@ -1,4 +1,4 @@
-# MusicSeek 🎧 by Andshe FTW aca hay cambios
+# MusicSeek 🎧 by Andshe 
 
 MusicSeek is a music search tool for DJs, collectors, and curious listeners.  
 It lets you search tracks and shows where to buy or stream them (Bandcamp, Discogs, Spotify, etc).
