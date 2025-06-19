@@ -31,10 +31,8 @@ function App() {
 
   const searchITunes = async (query: string): Promise<TrackResultCardProps[]> => {
     try {
-      const response = await fetch(
-        `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&media=music`
-      )
-      const data = await response.json()
+      const response = await fetch(`/api/itunes?query=${encodeURIComponent(query)}`);
+      const data = await response.json();
       const results = data.results as any[]
 
       const enrichedResults: TrackResultCardProps[] = await Promise.all(
