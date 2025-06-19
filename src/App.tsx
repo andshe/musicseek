@@ -2,6 +2,7 @@ import { useState, useRef } from 'react'
 import './App.css'
 import SearchBar from './components/SearchBar'
 import TrackResultCard from './components/TrackResultCard'
+import { searchDiscogsForTrack } from './api/discogs';
 
 type TrackLinks = {
   spotify?: string;

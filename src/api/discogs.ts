@@ -1,5 +1,5 @@
 
-const searchDiscogsForTrack = async (artist: string, title: string): Promise<string | null> => {
+export async function searchDiscogsForTrack (artist: string, title: string): Promise<string | null> {
     const query = `${artist} ${title}`
     const url = `/api/discogs?query=${encodeURIComponent(query)}`
     const discogsBaseUrl = "https://www.discogs.com";
