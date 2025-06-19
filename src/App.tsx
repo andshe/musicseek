@@ -18,6 +18,7 @@ type TrackResultCardProps = {
   links: TrackLinks;
 };
 
+
 function App() {
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<TrackResultCardProps[]>([])
@@ -56,27 +57,6 @@ function App() {
     } catch (error) {
       console.error('API error:', error)
       return []
-    }
-  }
-
-  const searchDiscogsForTrack = async (artist: string, title: string): Promise<string | null> => {
-    const token = import.meta.env.VITE_DISCOGS_TOKEN
-    const query = `${artist} ${title}`
-    const url = `https://api.discogs.com/database/search?q=${encodeURIComponent(query)}&type=release&token=${token}`
-    const discogsBaseUrl = "https://www.discogs.com";
-
-
-    try {
-      const response = await fetch(url)
-      const data = await response.json()
-      if (data.results && data.results.length > 0) {
-        const discogsLink = `${discogsBaseUrl}${data.results[0].uri}`;
-        return discogsLink 
-      }
-      return null
-    } catch (error) {
-      console.error('Discogs API error:', error)
-      return null
     }
   }
 
