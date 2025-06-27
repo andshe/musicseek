@@ -22,6 +22,7 @@ type TrackResultCardProps = {
 
 
 function App() {
+  const currentAudioRef = useRef<HTMLAudioElement | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [searchMode, setSearchMode] = useState<"track" | "playlist">("track");
   const [query, setQuery] = useState('')
@@ -71,6 +72,13 @@ function App() {
       return []
     }
   }
+  const handleTrackPlay = (audioEl: HTMLAudioElement) => {
+    if (currentAudioRef.current && currentAudioRef.current !== audioEl) {
+      currentAudioRef.current.pause();
+      currentAudioRef.current.currentTime = 0;
+    }
+    currentAudioRef.current = audioEl;
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 px-4 py-8">
@@ -106,6 +114,7 @@ function App() {
             image={track.image}
             previewUrl={track.previewUrl}
             links={track.links}
+            onPlay={handleTrackPlay}
           />
         ))}
       </div>

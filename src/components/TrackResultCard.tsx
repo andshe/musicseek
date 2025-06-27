@@ -11,6 +11,7 @@ type TrackResultCardProps = {
   image: string;
   previewUrl?: string;
   links: TrackLinks;
+  onPlay?: (audioEl: HTMLAudioElement) => void;
 };
 
 function TrackResultCard({
@@ -19,6 +20,8 @@ function TrackResultCard({
   image,
   previewUrl,
   links,
+  onPlay,
+  
 }: TrackResultCardProps) {
   return (
     <div className="bg-white rounded-xl shadow border border-gray-200 p-4 w-full max-w-3xl mx-auto flex flex-col gap-4">
@@ -81,11 +84,16 @@ function TrackResultCard({
         </div>
       </div>
 
-      {/* Audio player debajo */}
       {previewUrl && (
-        <audio controls className="w-full">
-          <source src={previewUrl} type="audio/mpeg" />
-          Tu navegador no soporta audio HTML5.
+        <audio
+          controls
+          className="w-full"
+          src={previewUrl}
+          onPlay={(e) => {
+            if (onPlay) onPlay(e.currentTarget);
+          }}
+        >
+          Your browser does not support HTML5 audio.
         </audio>
       )}
     </div>
