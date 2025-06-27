@@ -36,6 +36,7 @@ function App() {
       setResults(enrichedResults)
     } catch (err) {
       console.error(err);
+      alert("Ocurrió un error al buscar los resultados. Revisa la consola.");
     } finally {
       setIsLoading(false);
     }
@@ -90,7 +91,7 @@ function App() {
             <p className="text-gray-700">Funcionalidad de importar playlist (próximamente)</p>
           </div>
         )}
-        
+
         {isLoading && (
           <div className="flex justify-center items-center my-4">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
