@@ -1,29 +1,28 @@
 /// <reference types="node" />
 
-export default function handler(req: any, res: any) {
+export default async function handler(req: any, res: any) {
   const clientId = process.env.SPOTIFY_CLIENT_ID;
   const redirectUri = process.env.SPOTIFY_REDIRECT_URI;
-  const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
 
-  console.log("Spotify Auth Debug:", {
-    clientId,
-    redirectUri,
-    clientSecretExists: !!clientSecret,
-  });
-
-  if (!clientId || !redirectUri || !clientSecret) {
-    return res.status(500).json({
-      error: "Missing one or more environment variables.",
-      clientId: !!clientId,
-      redirectUri: !!redirectUri,
-      clientSecret: !!clientSecret,
-    });
+  if (!clientId || !redirectUri) {
+    return res.status(500).json({ error: "Missing SPOTIFY_CLIENT_ID or SPOTIFY_REDIRECT_URI" });
   }
 
-  return res.status(200).json({
-    message: "Spotify auth endpoint is working.",
-    clientId,
-    redirectUri,
-    clientSecretExists: !!clientSecret,
+  const scope = [
+    "user-read-private",
+    "user-read-email",
+    "playlist-read-private",
+    "playlist-read-collaborative"
+  ].join(" ");
+
+  const queryParams = new URLSearchParams({
+    response_type: "code",
+    client_id: clientId,
+    scope,
+    redirect_uri: redirectUri,
   });
+
+  const authUrl = `https://accounts.spotify.com/authorize?${queryParams.toString()}`;
+
+  return res.redirect(302, authUrl);
 }
