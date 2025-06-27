@@ -22,15 +22,23 @@ type TrackResultCardProps = {
 
 
 function App() {
+  const [isLoading, setIsLoading] = useState(false);
   const [searchMode, setSearchMode] = useState<"track" | "playlist">("track");
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<TrackResultCardProps[]>([])
   const audioRef = useRef(null)
 
   const handleSearch = async () => {
-    console.log('Searching:', query)
-    const enrichedResults = await searchITunes(query)
-    setResults(enrichedResults)
+    setIsLoading(true);
+    try{
+      console.log('Searching:', query)
+      const enrichedResults = await searchITunes(query)
+      setResults(enrichedResults)
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   const searchITunes = async (query: string): Promise<TrackResultCardProps[]> => {
@@ -80,6 +88,12 @@ function App() {
         {searchMode === "playlist" && (
           <div className="p-4 bg-white border rounded shadow">
             <p className="text-gray-700">Funcionalidad de importar playlist (próximamente)</p>
+          </div>
+        )}
+        
+        {isLoading && (
+          <div className="flex justify-center items-center my-4">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
           </div>
         )}
 
