@@ -1,0 +1,10 @@
+{
+  "search_placeholder": "Type a song, artist or album...",
+  "search_button": "Seek",
+  "search_individually": "Search individually",
+  "loading": "Loading...",
+  "import_playlist": "Import playlist",
+  "playlist_placeholder": "Paste playlist URL...",
+  "no_results": "No results found",
+  "error_fetching_results": "An error occurred while fetching the results. Check the console."
+}

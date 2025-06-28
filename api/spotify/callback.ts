@@ -1,50 +1,50 @@
 /// <reference types="node" />
 
 export default async function handler(req: any, res: any) {
-    const { code } = req.query;
+    const code = req.query.code;
+    const clientId = process.env.SPOTIFY_CLIENT_ID;
+    const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
+    const redirectUri = process.env.SPOTIFY_REDIRECT_URI;
   
     if (!code) {
-      return res.status(400).json({ error: 'Missing code from Spotify' });
+      return res.status(400).json({ error: "Missing code from Spotify" });
     }
   
-    const clientId = process.env.SPOTIFY_CLIENT_ID!;
-    const clientSecret = process.env.SPOTIFY_CLIENT_SECRET!;
-    const redirectUri = process.env.SPOTIFY_REDIRECT_URI!;
+    const tokenUrl = "https://accounts.spotify.com/api/token";
   
-    const tokenEndpoint = 'https://accounts.spotify.com/api/token';
-  
-    const authHeader = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
+    const body = new URLSearchParams({
+      grant_type: "authorization_code",
+      code: code,
+      redirect_uri: redirectUri!,
+      client_id: clientId!,
+      client_secret: clientSecret!,
+    });
   
     try {
-      const response = await fetch(tokenEndpoint, {
-        method: 'POST',
+      const response = await fetch(tokenUrl, {
+        method: "POST",
         headers: {
-          'Authorization': `Basic ${authHeader}`,
-          'Content-Type': 'application/x-www-form-urlencoded',
+          "Content-Type": "application/x-www-form-urlencoded",
         },
-        body: new URLSearchParams({
-          grant_type: 'authorization_code',
-          code: code as string,
-          redirect_uri: redirectUri,
-        }),
+        body,
       });
   
-      const tokenData = await response.json();
+      const data = await response.json();
   
       if (!response.ok) {
-        return res.status(500).json({ error: 'Failed to get token from Spotify', details: tokenData });
+        return res.status(500).json({ error: "Failed to get access token", details: data });
       }
   
-      // Podés guardar el token en memoria, cookie, etc.
+      // Podés redirigir con token o guardarlo si usás sesiones
       return res.status(200).json({
-        access_token: tokenData.access_token,
-        refresh_token: tokenData.refresh_token,
-        expires_in: tokenData.expires_in,
+        message: "Token received from Spotify",
+        access_token: data.access_token,
+        expires_in: data.expires_in,
+        refresh_token: data.refresh_token,
+        scope: data.scope,
       });
-  
     } catch (error) {
-      console.error('Spotify callback error:', error);
-      return res.status(500).json({ error: 'Internal server error' });
+      return res.status(500).json({ error: "Spotify token exchange failed", details: error });
     }
   }
   

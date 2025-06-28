@@ -25,9 +25,9 @@ function TrackResultCard({
 }: TrackResultCardProps) {
   return (
     <div className="bg-white rounded-xl shadow border border-gray-200 p-4 w-full max-w-3xl mx-auto flex flex-col gap-4">
-      {/* Contenido superior: imagen + info */}
+      {/*  */}
       <div className="flex gap-4 items-start">
-        {/* Imagen */}
+        {/* Image */}
         <img
           src={image}
           alt={`${title} cover`}

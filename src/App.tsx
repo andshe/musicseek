@@ -4,6 +4,7 @@ import SearchBar from './components/SearchBar'
 import TrackResultCard from './components/TrackResultCard'
 import { searchDiscogsForTrack } from './api/discogs';
 import SearchToggle from "./components/SearchToggle";
+import './i18n';
 
 type TrackLinks = {
   spotify?: string;
@@ -37,7 +38,7 @@ function App() {
       setResults(enrichedResults)
     } catch (err) {
       console.error(err);
-      alert("Ocurrió un error al buscar los resultados. Revisa la consola.");
+      alert("An error occurred while fetching the results. Check the console for more details.");
     } finally {
       setIsLoading(false);
     }
@@ -96,7 +97,7 @@ function App() {
         {/* En el futuro, podés agregar acá el importador de playlist */}
         {searchMode === "playlist" && (
           <div className="p-4 bg-white border rounded shadow">
-            <p className="text-gray-700">Funcionalidad de importar playlist (próximamente)</p>
+            <p className="text-gray-700">Soon ... </p>
           </div>
         )}
 
