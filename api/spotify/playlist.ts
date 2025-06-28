@@ -21,7 +21,9 @@ export default async function handler(req: any, res: any) {
     });
   
     if (!tokenRes.ok) {
-      return res.status(500).json({ error: 'Failed to get token from Spotify' });
+      const errorText = await tokenRes.text();
+      console.error('Error getting token:', errorText);
+      return res.status(500).json({ error: 'Failed to get token from Spotify', details: errorText });
     }
   
     const { access_token } = await tokenRes.json();
@@ -32,13 +34,17 @@ export default async function handler(req: any, res: any) {
       },
     });
   
+    const responseText = await playlistRes.text();
+    console.log('Spotify API status:', playlistRes.status);
+    console.log('Spotify API response:', responseText);
+  
     if (!playlistRes.ok) {
       return res
         .status(playlistRes.status)
-        .json({ error: 'Failed to fetch playlist', status: playlistRes.status });
+        .json({ error: 'Failed to fetch playlist', status: playlistRes.status, details: responseText });
     }
   
-    const data = await playlistRes.json();
+    const data = JSON.parse(responseText);
     return res.status(200).json(data);
   }
   
