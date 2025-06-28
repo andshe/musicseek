@@ -4,6 +4,7 @@ type SearchBarProps = {
   query: string;
   setQuery: (value: string) => void;
   onSearch: () => void;
+  mode: 'individual' | 'playlist';
 };
 
 function SearchBar({ query, setQuery, onSearch }: SearchBarProps) {

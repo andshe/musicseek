@@ -2,8 +2,8 @@
 import { useTranslation } from 'react-i18next';
 
 type Props = {
-  searchMode: "track" | "playlist";
-  setSearchMode: (mode: "track" | "playlist") => void;
+  searchMode: "individual" | "playlist";
+  setSearchMode: (mode: "individual" | "playlist") => void;
 };
 
 export default function SearchToggle({ searchMode, setSearchMode }: Props) {
@@ -12,9 +12,9 @@ export default function SearchToggle({ searchMode, setSearchMode }: Props) {
     <div className="flex space-x-2 mb-4">
       <button
         className={`px-4 py-2 border rounded-md ${
-          searchMode === "track" ? "border-black font-bold" : "border-gray-300"
+          searchMode === "individual" ? "border-black font-bold" : "border-gray-300"
         }`}
-        onClick={() => setSearchMode("track")}
+        onClick={() => setSearchMode("individual")}
       >
         {t('search_individually')}
       </button>

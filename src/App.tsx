@@ -5,6 +5,8 @@ import TrackResultCard from './components/TrackResultCard'
 import { searchDiscogsForTrack } from './api/discogs';
 import SearchToggle from "./components/SearchToggle";
 import './i18n';
+import { useTranslation } from 'react-i18next';
+
 
 type TrackLinks = {
   spotify?: string;
@@ -25,24 +27,45 @@ type TrackResultCardProps = {
 function App() {
   const currentAudioRef = useRef<HTMLAudioElement | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [searchMode, setSearchMode] = useState<"track" | "playlist">("track");
+  const [searchMode, setSearchMode] = useState<'individual' | 'playlist'>('individual');
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<TrackResultCardProps[]>([])
   const audioRef = useRef(null)
+  const { t } = useTranslation();
+
 
   const handleSearch = async () => {
     setIsLoading(true);
-    try{
-      console.log('Searching:', query)
-      const enrichedResults = await searchITunes(query)
-      setResults(enrichedResults)
+    try {
+      console.log('Searching:', query);
+  
+      if (searchMode === 'individual') {
+        const enrichedResults = await searchITunes(query);
+        setResults(enrichedResults);
+      } else if (searchMode === 'playlist') {
+        const playlistId = extractPlaylistId(query);
+  
+        if (!playlistId) {
+          alert('Invalid playlist URL');
+          return;
+        }
+  
+        const data = await fetchPublicPlaylist(playlistId);
+        const adaptedResults = mapSpotifyResults(data.tracks.items);
+        setResults(adaptedResults);
+        
+      } else {
+        const enrichedResults = await searchITunes(query);
+        setResults(enrichedResults);
+      }
     } catch (err) {
       console.error(err);
       alert("An error occurred while fetching the results. Check the console for more details.");
     } finally {
       setIsLoading(false);
     }
-  }
+  };
+  
 
   const searchITunes = async (query: string): Promise<TrackResultCardProps[]> => {
     try {
@@ -81,6 +104,35 @@ function App() {
     currentAudioRef.current = audioEl;
   };
 
+  const extractPlaylistId = (url: string): string | null => {
+    const match = url.match(/playlist\/([a-zA-Z0-9]+)(\?|$)/);
+    console.log(match)
+    return match ? match[1] : null;
+  };
+  
+  const fetchPublicPlaylist = async (playlistId: string) => {
+    const res = await fetch(`/api/spotify/playlist?playlistId=${playlistId}`);
+    if (!res.ok) {
+      throw new Error('Failed to fetch playlist');
+    }
+    return res.json();
+  };
+  const mapSpotifyResults = (spotifyItems: any[]): TrackResultCardProps[] => {
+    return spotifyItems.map((item) => {
+      const track = item.track;
+      return {
+        title: track.name,
+        artist: track.artists?.[0]?.name ?? 'Unknown',
+        image: track.album?.images?.[0]?.url ?? '',
+        previewUrl: track.preview_url ?? undefined,
+        links: {
+          spotify: track.external_urls?.spotify,
+        },
+      };
+    });
+  };
+  
+
   return (
     <div className="min-h-screen bg-gray-100 px-4 py-8">
       <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">
@@ -88,16 +140,29 @@ function App() {
       </h1>
 
       <div className="max-w-4xl mx-auto space-y-6">
+        
         <SearchToggle searchMode={searchMode} setSearchMode={setSearchMode} />
 
-        {searchMode === "track" && (
-          <SearchBar query={query} setQuery={setQuery} onSearch={handleSearch} />
+        {searchMode === "individual" && (
+          <SearchBar query={query} setQuery={setQuery} onSearch={handleSearch} mode={searchMode}/>
         )}
 
         {/* En el futuro, podés agregar acá el importador de playlist */}
         {searchMode === "playlist" && (
-          <div className="p-4 bg-white border rounded shadow">
-            <p className="text-gray-700">Soon ... </p>
+          <div className="p-4 bg-white border rounded shadow space-y-4">
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={t('playlist_placeholder')}
+              className="w-full px-4 py-2 border rounded-md"
+            />
+            <button
+              onClick={handleSearch}
+              className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800"
+            >
+              {t('search_button')}
+            </button>
           </div>
         )}
 
