@@ -6,6 +6,8 @@ export default async function handler(req: any, res: any) {
     if (!playlistId || typeof playlistId !== 'string') {
       return res.status(400).json({ error: 'Missing playlistId' });
     }
+    console.log('Backend received playlistId:', playlistId);
+
   
     const clientId = process.env.SPOTIFY_CLIENT_ID;
     const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
@@ -15,7 +17,7 @@ export default async function handler(req: any, res: any) {
       headers: {
         Authorization:
           'Basic ' + Buffer.from(`${clientId}:${clientSecret}`).toString('base64'),
-        'Content-Type': 'application/x-www-form-urlencoded', 
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: 'grant_type=client_credentials',
     });
@@ -27,6 +29,7 @@ export default async function handler(req: any, res: any) {
     }
   
     const { access_token } = await tokenRes.json();
+    console.log('Spotify access token acquired');
   
     const playlistRes = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}`, {
       headers: {
