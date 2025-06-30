@@ -15,7 +15,7 @@ export default async function handler(req: any, res: any) {
       headers: {
         Authorization:
           'Basic ' + Buffer.from(`${clientId}:${clientSecret}`).toString('base64'),
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/x-www-form-urlencoded', 
       },
       body: 'grant_type=client_credentials',
     });
