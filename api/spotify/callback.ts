@@ -7,7 +7,7 @@ export default async function handler(req: any, res: any) {
     const redirectUri = process.env.SPOTIFY_REDIRECT_URI;
 
     //const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000"; 
-    const frontendUrl = "https://musicseek-alpha.vercel.app";
+    const frontendUrl = process.env.FRONTEND_URL;
 
   
     if (!code) {
