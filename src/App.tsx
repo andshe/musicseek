@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import './App.css'
 import SearchBar from './components/SearchBar'
 import TrackResultCard from './components/TrackResultCard'
@@ -111,12 +111,16 @@ function App() {
   };
   
   const fetchPublicPlaylist = async (playlistId: string) => {
-    const res = await fetch(`/api/spotify/playlist?playlistId=${playlistId}`);
+    const token = localStorage.getItem("spotify_token");
+  
+    const res = await fetch(`/api/spotify/playlist?playlistId=${playlistId}&access_token=${token}`);
     if (!res.ok) {
       throw new Error('Failed to fetch playlist');
     }
     return res.json();
   };
+  
+  
   const mapSpotifyResults = (spotifyItems: any[]): TrackResultCardProps[] => {
     return spotifyItems.map((item) => {
       const track = item.track;
@@ -132,9 +136,28 @@ function App() {
     });
   };
   
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("access_token");
+
+    if (token) {
+      localStorage.setItem("spotify_token", token);
+      window.history.replaceState({}, document.title, "/"); // limpia la URL
+    }
+  }, []);
+
 
   return (
     <div className="min-h-screen bg-gray-100 px-4 py-8">
+      <button
+        onClick={() => {
+          window.location.href = "/api/spotify/auth";
+        }}
+        className="mb-4 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+      >
+        Login with Spotify
+      </button>
+
       <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">
         MusicSeek 
       </h1>

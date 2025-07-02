@@ -5,6 +5,10 @@ export default async function handler(req: any, res: any) {
     const clientId = process.env.SPOTIFY_CLIENT_ID;
     const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
     const redirectUri = process.env.SPOTIFY_REDIRECT_URI;
+
+    //const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000"; 
+    const frontendUrl = "https://musicseek-alpha.vercel.app";
+
   
     if (!code) {
       return res.status(400).json({ error: "Missing code from Spotify" });
@@ -36,13 +40,17 @@ export default async function handler(req: any, res: any) {
       }
   
       // Podés redirigir con token o guardarlo si usás sesiones
-      return res.status(200).json({
+      /*return res.status(200).json({
         message: "Token received from Spotify",
         access_token: data.access_token,
         expires_in: data.expires_in,
         refresh_token: data.refresh_token,
         scope: data.scope,
       });
+      */
+      
+      return res.redirect(`${frontendUrl}/?access_token=${encodeURIComponent(data.access_token)}`);
+
     } catch (error) {
       return res.status(500).json({ error: "Spotify token exchange failed", details: error });
     }
